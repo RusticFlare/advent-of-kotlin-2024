@@ -1,21 +1,45 @@
+import com.github.h0tk3y.betterParse.combinators.and
+import com.github.h0tk3y.betterParse.combinators.map
+import com.github.h0tk3y.betterParse.combinators.use
+import com.github.h0tk3y.betterParse.grammar.Grammar
+import com.github.h0tk3y.betterParse.grammar.parseToEnd
+import com.github.h0tk3y.betterParse.lexer.regexToken
+import io.kotest.assertions.withClue
+import io.kotest.matchers.equals.shouldBeEqual
+import io.kotest.matchers.shouldBe
+import kotlin.math.max
+import kotlin.math.min
+
 fun main() {
-    fun part1(input: List<String>): Int {
-        return input.size
+    fun part1(input: List<String>): UInt {
+        val (leftIds, rightIds) = input.map { UIntPairParser.parseToEnd(it) }.unzip()
+
+        return leftIds.sorted().zip(rightIds.sorted()) { l, r -> l difference r }.sum()
     }
 
     fun part2(input: List<String>): Int {
         return input.size
     }
 
-    // Test if implementation meets criteria from the description, like:
-    check(part1(listOf("test_input")) == 1)
-
-    // Or read a large test input from the `src/Day01_test.txt` file:
     val testInput = readInput("Day01_test")
-    check(part1(testInput) == 1)
+    withClue("part1") {
+        part1(testInput) shouldBe 11u
+    }
 
     // Read the input from the `src/Day01.txt` file.
     val input = readInput("Day01")
     part1(input).println()
-    part2(input).println()
+}
+
+private object UIntPairParser : Grammar<Pair<UInt, UInt>>() {
+    private val digits by regexToken("\\d+")
+    private val whitespace by regexToken("\\s+", ignore = true)
+
+    private val locationId by digits use { text.toUInt() }
+
+    override val rootParser by (locationId and locationId) map  { (l, r) -> l to r }
+}
+
+private infix fun UInt.difference(other: UInt): UInt {
+    return max(this, other) - min(this, other)
 }
