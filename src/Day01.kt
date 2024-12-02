@@ -45,7 +45,3 @@ private object UIntPairParser : Grammar<Pair<UInt, UInt>>() {
 
     override val rootParser by (locationId and locationId) map  { (l, r) -> l to r }
 }
-
-private infix fun UInt.difference(other: UInt): UInt {
-    return max(this, other) - min(this, other)
-}
