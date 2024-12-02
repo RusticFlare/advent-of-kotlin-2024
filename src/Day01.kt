@@ -30,7 +30,6 @@ fun main() {
         part2(testInput) shouldBe 31u
     }
 
-    // Read the input from the `src/Day01.txt` file.
     val input = readInput("Day01")
     "Day 1".println()
     "  Part 1: ${part1(input)}".println()
@@ -44,8 +43,4 @@ private object UIntPairParser : Grammar<Pair<UInt, UInt>>() {
     private val locationId by digits use { text.toUInt() }
 
     override val rootParser by (locationId and locationId) map  { (l, r) -> l to r }
-}
-
-private infix fun UInt.difference(other: UInt): UInt {
-    return max(this, other) - min(this, other)
 }
