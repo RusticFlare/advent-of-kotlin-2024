@@ -41,7 +41,7 @@ private object ReportParser : Grammar<Report>() {
     override val rootParser by oneOrMore(level) map { Report(levels = it) }
 }
 
-data class Report(private val levels: List<UInt>) {
+private data class Report(private val levels: List<UInt>) {
 
     private val zippedWithNextLevels = levels.zipWithNext()
     private val isGraduallyIncreasing = zippedWithNextLevels.all { (a, b) -> a < b && (b - a) <= 3u }
