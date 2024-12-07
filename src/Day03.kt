@@ -19,7 +19,6 @@ private object Day03 : AoC<ULong, ULong>() {
     override fun part2(input: List<String>): ULong {
         return input.joinToString(separator = "").doOrDoNotMultiplySomeNumbers()
     }
-
 }
 
 private val mulRegex = Regex("mul\\((\\d{1,3}),(\\d{1,3})\\)")
