@@ -1,3 +1,5 @@
+import com.github.h0tk3y.betterParse.grammar.Grammar
+import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.math.max
@@ -18,3 +20,5 @@ fun Any?.println() = println(this)
 infix fun UInt.difference(other: UInt): UInt {
     return max(this, other) - min(this, other)
 }
+
+fun <T> Grammar<T>.parseToEndOrNull(input: String): T? = runCatching { parseToEnd(input) }.getOrNull()

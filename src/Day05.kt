@@ -1,6 +1,5 @@
 import com.github.h0tk3y.betterParse.combinators.*
 import com.github.h0tk3y.betterParse.grammar.Grammar
-import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.lexer.literalToken
 import com.github.h0tk3y.betterParse.lexer.regexToken
 
@@ -14,23 +13,17 @@ private object Day05 : AoC<Int, Int>() {
     override val part2TestExpected = 123
 
     override fun part1(input: List<String>): Int {
-        val pageOrderingRules = input
-            .mapNotNull { runCatching { PageOrderingRuleParser.parseToEnd(it) }.getOrNull() }
-            .comparator()
+        val pageOrderingComparator = input.mapNotNull { PageOrderingRuleParser.parseToEndOrNull(it) }.comparator()
 
-        return input
-            .mapNotNull { runCatching { PagesToProduceInEachUpdateParser.parseToEnd(it) }.getOrNull() }
-            .filter { it.isSortedWith(pageOrderingRules) }
+        return input.mapNotNull { PagesToProduceInEachUpdateParser.parseToEndOrNull(it) }
+            .filter { it.isSortedWith(pageOrderingComparator) }
             .sumOf { it.middleValue() }
     }
 
     override fun part2(input: List<String>): Int {
-        val pageOrderingComparator = input
-            .mapNotNull { runCatching { PageOrderingRuleParser.parseToEnd(it) }.getOrNull() }
-            .comparator()
+        val pageOrderingComparator = input.mapNotNull { PageOrderingRuleParser.parseToEndOrNull(it) }.comparator()
 
-        return input
-            .mapNotNull { runCatching { PagesToProduceInEachUpdateParser.parseToEnd(it) }.getOrNull() }
+        return input.mapNotNull { PagesToProduceInEachUpdateParser.parseToEndOrNull(it) }
             .filter { it.isNotSortedWith(pageOrderingComparator) }
             .map { it.sortedWith(pageOrderingComparator) }
             .sumOf { it.middleValue() }
