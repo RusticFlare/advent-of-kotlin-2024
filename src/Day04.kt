@@ -1,43 +1,32 @@
-import io.kotest.assertions.withClue
-import io.kotest.matchers.ints.shouldBeExactly
-
-private const val DAY = "Day04"
-
 private val XMAS = listOf('X', 'M', 'A', 'S')
 private val SAMX = XMAS.asReversed()
 
 fun main() {
+    Day04.run()
+}
 
-    fun wordSearchCharacters(input: List<String>): List<WordSearchCharacter> {
-        return input.flatMapIndexed { y, line ->
-            line.mapIndexed { x, character ->
-                WordSearchCharacter(character = character, x = x, y = y)
-            }
-        }
-    }
+private object Day04 : AoC<Int, Int>() {
 
-    fun part1(input: List<String>): Int {
+    override val part1TestExpected = 18
+    override val part2TestExpected = 9
+
+    override fun part1(input: List<String>): Int {
         return wordSearchCharacters(input).run {
             xmasCount { x, _ -> x } + xmasCount { _, y -> y } + xmasCount { x, y -> x + y } + xmasCount { x, y -> x - y }
         }
     }
 
-    fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): Int {
         return wordSearchCharacters(input).x_masCount()
     }
+}
 
-    val testInput = readInput("${DAY}_test")
-    withClue("part1") {
-        part1(testInput) shouldBeExactly 18
+private fun wordSearchCharacters(input: List<String>): List<WordSearchCharacter> {
+    return input.flatMapIndexed { y, line ->
+        line.mapIndexed { x, character ->
+            WordSearchCharacter(character = character, x = x, y = y)
+        }
     }
-    withClue("part2") {
-        part2(testInput) shouldBeExactly 9
-    }
-
-    val input = readInput(DAY)
-    DAY.println()
-    "  Part 1: ${part1(input)}".println()
-    "  Part 2: ${part2(input)}".println()
 }
 
 private data class WordSearchCharacter(

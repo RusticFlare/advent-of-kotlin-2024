@@ -1,29 +1,25 @@
 import NumberMultiplierOperation.*
-import io.kotest.assertions.withClue
-import io.kotest.matchers.shouldBe
 
 fun main() {
-    fun part1(input: List<String>): ULong {
+    Day03.run()
+}
+
+private object Day03 : AoC<ULong, ULong>() {
+
+    override val part1TestExpected: ULong = 161u
+    override val part2TestExpected: ULong = 48u
+
+    override val part1TestSuffix = "1"
+    override val part2TestSuffix = "2"
+
+    override fun part1(input: List<String>): ULong {
         return input.sumOf { it.multiplySomeNumbers() }
     }
 
-    fun part2(input: List<String>): ULong {
+    override fun part2(input: List<String>): ULong {
         return input.joinToString(separator = "").doOrDoNotMultiplySomeNumbers()
     }
 
-    val testInput1 = readInput("Day03_test1")
-    withClue("part1") {
-        part1(testInput1) shouldBe 161u
-    }
-    val testInput2 = readInput("Day03_test2")
-    withClue("part2") {
-        part2(testInput2) shouldBe 48u
-    }
-
-    val input = readInput("Day03")
-    "Day 3".println()
-    "  Part 1: ${part1(input)}".println()
-    "  Part 2: ${part2(input)}".println()
 }
 
 private val mulRegex = Regex("mul\\((\\d{1,3}),(\\d{1,3})\\)")
@@ -49,7 +45,7 @@ private fun String.numberMultiplierOperations(): Sequence<NumberMultiplierOperat
     return (muls + dos + doNots).sortedBy { it.range.first }
 }
 
-private sealed interface NumberMultiplierOperation{
+private sealed interface NumberMultiplierOperation {
 
     val range: IntRange
 
@@ -77,7 +73,7 @@ private sealed interface NumberMultiplierState {
         override val value: ULong
     ) : NumberMultiplierState {
 
-        override fun transition(operation: NumberMultiplierOperation) = when(operation) {
+        override fun transition(operation: NumberMultiplierOperation) = when (operation) {
             is Do -> this
             is DoNot -> NotDoing(value)
             is Mul -> copy(value = value + operation.result)
@@ -88,7 +84,7 @@ private sealed interface NumberMultiplierState {
         override val value: ULong
     ) : NumberMultiplierState {
 
-        override fun transition(operation: NumberMultiplierOperation) = when(operation) {
+        override fun transition(operation: NumberMultiplierOperation) = when (operation) {
             is Do -> Doing(value)
             is DoNot, is Mul -> this
         }
