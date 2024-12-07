@@ -22,7 +22,6 @@ private object Day02 : AoC<Int, Int>() {
         return input.map { ReportParser.parseToEnd(it) }
             .count { report -> report.isSafe || report.problemDampenedReports().any { it.isSafe } }
     }
-
 }
 
 private object ReportParser : Grammar<Report>() {

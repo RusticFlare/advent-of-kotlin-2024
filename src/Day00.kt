@@ -14,5 +14,4 @@ private object Day00 : AoC<Int, Int>() {
     override fun part2(input: List<String>): Int {
         return 0
     }
-
 }

@@ -25,7 +25,6 @@ private object Day01 : AoC<UInt, UInt>() {
 
         return leftIds.sumOf { l -> l * rightIds.count { r -> l == r }.toUInt() }
     }
-
 }
 
 private object UIntPairParser : Grammar<Pair<UInt, UInt>>() {
