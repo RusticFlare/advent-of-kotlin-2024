@@ -4,32 +4,25 @@ import com.github.h0tk3y.betterParse.combinators.use
 import com.github.h0tk3y.betterParse.grammar.Grammar
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import com.github.h0tk3y.betterParse.lexer.regexToken
-import io.kotest.assertions.withClue
-import io.kotest.matchers.ints.shouldBeExactly
-import io.kotest.matchers.shouldBe
 
 fun main() {
-    fun part1(input: List<String>): Int {
+    Day02.run()
+}
+
+private object Day02 : AoC<Int, Int>() {
+
+    override val part1TestExpected = 2
+    override val part2TestExpected = 4
+
+    override fun part1(input: List<String>): Int {
         return input.map { ReportParser.parseToEnd(it) }.count { it.isSafe }
     }
 
-    fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): Int {
         return input.map { ReportParser.parseToEnd(it) }
             .count { report -> report.isSafe || report.problemDampenedReports().any { it.isSafe } }
     }
 
-    val testInput = readInput("Day02_test")
-    withClue("part1") {
-        part1(testInput) shouldBeExactly 2
-    }
-    withClue("part2") {
-        part2(testInput) shouldBe 4
-    }
-
-    val input = readInput("Day02")
-    "Day 2".println()
-    "  Part 1: ${part1(input)}".println()
-    "  Part 2: ${part2(input)}".println()
 }
 
 private object ReportParser : Grammar<Report>() {
