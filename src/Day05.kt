@@ -11,7 +11,7 @@ fun main() {
 private object Day05 : AoC<Int, Int>() {
 
     override val part1TestExpected = 143
-    override val part2TestExpected = 0
+    override val part2TestExpected = 123
 
     override fun part1(input: List<String>): Int {
         val pageOrderingRules = input
@@ -21,11 +21,19 @@ private object Day05 : AoC<Int, Int>() {
         return input
             .mapNotNull { runCatching { PagesToProduceInEachUpdateParser.parseToEnd(it) }.getOrNull() }
             .filter { it.isSortedWith(pageOrderingRules) }
-            .sumOf { it[it.size / 2].value }
+            .sumOf { it.middleValue() }
     }
 
     override fun part2(input: List<String>): Int {
-        return 0
+        val pageOrderingComparator = input
+            .mapNotNull { runCatching { PageOrderingRuleParser.parseToEnd(it) }.getOrNull() }
+            .comparator()
+
+        return input
+            .mapNotNull { runCatching { PagesToProduceInEachUpdateParser.parseToEnd(it) }.getOrNull() }
+            .filter { it.isNotSortedWith(pageOrderingComparator) }
+            .map { it.sortedWith(pageOrderingComparator) }
+            .sumOf { it.middleValue() }
     }
 }
 
@@ -67,3 +75,6 @@ private value class PageNumber(val value: Int)
 private fun String.toPageNumber() = PageNumber(toInt())
 
 private fun <T> List<T>.isSortedWith(comparator: Comparator<T>) = this == this.sortedWith(comparator)
+private fun <T> List<T>.isNotSortedWith(comparator: Comparator<T>) = this != this.sortedWith(comparator)
+
+private fun List<PageNumber>.middleValue() = this[size / 2].value
